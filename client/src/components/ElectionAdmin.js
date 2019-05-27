@@ -132,8 +132,10 @@ class ElectionAdmin extends Component {
                                             )}
                                         </TableBody>
                                     </Table>
-                                    <Button style={{marginTop:'15px'}} variant='contained' color='primary' onClick={this.end}>Dừng bầu
-                                        cử </Button>
+                                    <div style={{textAlign: 'center'}}><Button style={{marginTop: '15px'}}
+                                                                               variant='contained' color='primary'
+                                                                               onClick={this.end}>
+                                        Dừng bầu cử </Button></div>
                                 </div> : <div style={{marginTop: '15px'}}>
                                     <FormControl margin="normal">
                                         <InputLabel htmlFor="email">Mỗi phiếu điền mấy người?</InputLabel>
@@ -143,7 +145,7 @@ class ElectionAdmin extends Component {
                                     </FormControl>
                                     <div style={{color: 'red'}}>{!!this.state.error && this.state.error}</div>
 
-                                    <div style={{marginTop: '20px'}}>
+                                    <div style={{marginTop: '20px', textAlign: 'center'}}>
                                         <Button variant='contained' color='primary' onClick={this.start}>Bắt đầu bầu
                                             cử</Button></div>
                                 </div>

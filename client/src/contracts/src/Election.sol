@@ -2,20 +2,20 @@ pragma solidity >=0.4.22 <0.7.0;
 pragma experimental ABIEncoderV2;
 /// @title Voting with delegation.
 contract Election {
-    uint public numberProposal = 1;  //moi nguoi bau toi da may nguoi
+    uint public numberProposal = 1;  //một người bầu tối đa  bao nhiêu ng
     bool public isVoting = false; // trạng thái của cuộc  bầu cử
 
 
-    struct Voter {//nguoi vote (co kha nang vote hoặc uỷ quyền vote cho người khác)
+    struct Voter {//người vote (co kha nang vote hoặc uỷ quyền vote cho người khác)
         uint weight;
         address addr;
-        address delegate;  //dia chi nguoi uy quyen
-        uint[] ballots;
+        address delegate;  //địa chỉ của người của người ủy quyền
+        uint[] ballots;    // các vé người này đang giữ
     }
 
     struct Ballot {
         bool voted;
-        uint[] voters; //id cua nhung nguoi duoc nguoi vote
+        uint[] voters; //những người được bầu trong 1 phiếu
     }
 
     struct Proposal {//ứng cử viên
@@ -34,7 +34,7 @@ contract Election {
         chairperson = msg.sender;
         voterArray.push(Voter(0, address(0), address(0), new uint[](0)));
     }
-
+    // bắt đầu cuộc bầu cử
     function start(uint proposalInBallot) public {
         require(proposalInBallot < proposals.length, "so nguoi trong 1 phieu bau qua nhieu");
         require(proposals.length > 1, "So ung cu vien qua it");
@@ -56,14 +56,14 @@ contract Election {
             proposals[i].voteCount = 0;
         }
     }
-
+    // kết thúc cuộc bầu cử
     function end() public {
         require(msg.sender == chairperson, "Nguoi gui khong dung");
         require(isVoting == true, "Bau cu dang khoong  dien ra");
         isVoting = false;
         uint value = winningProposal();
-        for(uint i=0;i<proposals.length;i++){
-            if(proposals[i].voteCount == value) {
+        for (uint i = 0; i < proposals.length; i++) {
+            if (proposals[i].voteCount == value) {
                 winners.push(proposals[i]);
             }
         }
@@ -157,7 +157,7 @@ contract Election {
     }
 
 
-    // tao tat cac cac nguoi di bau cu
+    // tạo tất cả các cử tri
     function setVoter(address[] memory addresses) public {
         require(msg.sender == chairperson, "Nguoi gui khong dung");
         voterArray.length = 1;
@@ -167,6 +167,7 @@ contract Election {
         }
     }
 
+    // tạo các ứng cử viên
     function setProposal(string[] memory names) public {
         require(msg.sender == chairperson, "Nguoi gui khong dung");
         proposals.length = 0;
@@ -184,7 +185,7 @@ contract Election {
         return voterArray;
     }
 
-    function getMyselfVoter() public view returns (Voter memory) {
+    function getMyself() public view returns (Voter memory) {
         return voterArray[voters[msg.sender]];
     }
 
@@ -195,5 +196,4 @@ contract Election {
     function getWinner() public view returns (Proposal[] memory) {
         return winners;
     }
-
 }

@@ -29,8 +29,9 @@ class Admin extends Component {
                     <Grid item md={2} style={{backgroundColor: "#1a193e", alignItems: 'stretch'}}>
                         <h1 style={{textAlign: 'center', marginBottom: '0px'}} className={styles.whiteText}>Trang
                             Admin</h1>
-                        <h3 style={{textAlign: 'center', margin: '0 auto 20px'}} className={styles.whiteText}>Bầu cử
-                            trực tuyến </h3>
+                        <h3 style={{textAlign: 'center', margin: '0 auto 20px'}} className={styles.whiteText}>
+                            <Link style={{color:'#5456a8', textDecoration:'none'}} to='/'>Bầu cử trực tuyến</Link>
+                        </h3>
                         <div style={{padding: '10px', backgroundColor: tab === 1 ? "#5456a8" : "inherit"}}>
                             <Link to={`${this.props.match.path}/proposal`} className={styles.whiteText}>Quản lý ứng cử
                                 viên</Link>
@@ -40,7 +41,8 @@ class Admin extends Component {
                                 cử</Link>
                         </div>
                         <div style={{padding: '10px', backgroundColor: tab === 3 ? "#5456a8" : "inherit"}}>
-                            <Link to={`${this.props.match.path}/election`} className={styles.whiteText}>Tiến hành bầu cử</Link>
+                            <Link to={`${this.props.match.path}/election`} className={styles.whiteText}>Tiến hành bầu
+                                cử</Link>
                         </div>
                     </Grid>
                     <Grid item md={10}>

@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import styles from './Home.module.css';
 import API from './../core/api_constants';
-// import {actionLogout, actionLogin} from "../core/store";
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 import MyContractJSON from './../contracts/build/Election';
@@ -193,78 +192,93 @@ class Home extends Component {
                             </Grid>
                             :
                             <Grid item md={8} style={{marginTop: '10px'}}>
-                                <h2 style={{marginLeft: '20px', color: '#5456a8',}}>Trạng thái bầu cử: Đang diễn
-                                    ra </h2>
-                                <div style={{
-                                    textAlign: 'center',
-                                    fontSize: '20px',
-                                    color: '#5456a8',
-                                    marginTop: '15px'
-                                }}>
-                                    {this.state.proposalRemain > 0 ?
-                                        <span>
+                                <Paper  style={{paddingBottom:'20px'}}>
+                                    <h2 style={{marginLeft: '20px', color: '#5456a8',}}>Trạng thái bầu cử: Đang diễn
+                                        ra </h2>
+                                    <div style={{
+                                        textAlign: 'center',
+                                        fontSize: '20px',
+                                        color: '#5456a8',
+                                        marginTop: '15px'
+                                    }}>
+                                        {this.state.proposalRemain > 0 ?
+                                            <span>
                                             <Warning
                                                 style={{color: '#ff6d43'}}/>
                                             <span> Còn </span>
-                                            {this.state.proposalRemain} ứng cử viên phải chọn</span>
-                                        : <span style={{color: 'white'}}>.</span>
-                                    }
-                                </div>
-                                <Typography variant='h5' style={{color: "#6f6f94", margin: '15px'}}>Danh sách các ứng cử
-                                    viên</Typography>
-                                <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
-                                    {this.state.proposal.map((item, index) => <VoterCard click={this.onSelectProposal}
-                                                                                         key={index} id={index}
-                                                                                         name={item.name}
-                                                                                         selected={item.selected}/>)
-                                    }
-                                </div>
-                                {this.state.ballotRemain > 0 ? <div style={{textAlign: 'center'}}>
-                                        <div style={{textAlign: "center"}}>Bạn có {this.state.ballotRemain} phiếu bầu</div>
-                                        <span>Dùng  </span>
-                                        <Select value={ballotToVote} onChange={this.onSelectBallotCount}>
-                                            {
-                                                menuItems.map((i, index) => <MenuItem key={index} value={i}>{i}</MenuItem>)
-                                            }
-                                        </Select>
-                                        <span>  phiếu đề bầu </span>
-                                    </div> :
-                                    <div style={{textAlign: 'center', color: 'red'}}>Bạn không có phiếu bầu nào </div>}
+                                                {this.state.proposalRemain} ứng cử viên phải chọn</span>
+                                            : <span style={{color: 'white'}}>.</span>
+                                        }
+                                    </div>
+                                    <Typography variant='h5' style={{color: "#6f6f94", margin: '15px'}}>Ví của bạn: {this.state.account }</Typography>
+                                    <Typography variant='h5' style={{color: "#6f6f94", margin: '15px'}}>Bạn có {this.state.ballotRemain} phiếu bầu
+                                    </Typography>
+                                    <Typography variant='h5' style={{color: "#6f6f94", margin: '15px'}}>Danh sách các
+                                        ứng cử
+                                        viên</Typography>
+                                    <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+                                        {this.state.proposal.map((item, index) => <VoterCard
+                                            click={this.onSelectProposal}
+                                            key={index} id={index}
+                                            name={item.name}
+                                            selected={item.selected}/>)
+                                        }
+                                    </div>
+                                    {this.state.ballotRemain > 0 ? <div style={{textAlign: 'center'}}>
 
-                                <div style={{textAlign: 'center', marginTop: '20px'}}><Button onClick={this.vote}
-                                                                                              disabled={this.state.proposalRemain !== 0 || this.state.ballotRemain === 0}
-                                                                                              variant='contained'
-                                                                                              color='primary'>Bầu
-                                    cử</Button>
-                                </div>
-                                <Typography variant='h5' style={{color: "#6f6f94", margin: '15px'}}>Ủy quyền cho người
-                                    khác (tùy chọn)</Typography>
-                                {
-                                    this.state.myself.delegate !== '0x0000000000000000000000000000000000000000' ?
-                                        <Typography variant='h6' style={{color: "#6f6f94", margin: '15px'}}>
-                                            <span>Bạn đã ủy quyền rồi </span> <Warning
-                                            style={{color: '#ff6d43'}}/>
-                                        </Typography> :
-                                        <Typography variant='h6' style={{color: "#6f6f94", margin: '15px'}}>Bạn có thể
-                                            chọn 1
-                                            địa chỉ ví để ủy quyền cho họ bầu cử</Typography>
-                                }
-                                <div style={{textAlign: 'center'}}>
-                                    <Select style={{margin: '10px 15px', minWidth: '150px'}}
-                                            value={this.state.delegateAddress}
-                                            onChange={this.onDelegateChanged}>
-                                        {delegateMenu.map((i, index) => <MenuItem key={index}
-                                                                                  value={i.addr}>{i.addr}</MenuItem>)}
-                                    </Select>
-                                    <div className={styles.alert}>{!!this.state.error && this.state.error} </div>
-                                </div>
-                                <div style={{textAlign: 'center'}}>
-                                    <Button
-                                        disabled={this.state.ballotRemain === 0 || this.state.myself.delegate !== '0x0000000000000000000000000000000000000000'}
-                                        variant='contained'
-                                        color={'primary'} onClick={this.startDelegate}>Ủy
-                                        quyền</Button>
-                                </div>
+                                            <span>Dùng  </span>
+                                            <Select value={ballotToVote} onChange={this.onSelectBallotCount}>
+                                                {
+                                                    menuItems.map((i, index) => <MenuItem key={index}
+                                                                                          value={i}>{i}</MenuItem>)
+                                                }
+                                            </Select>
+                                            <span>  phiếu đề bầu </span>
+                                        </div> :
+                                        <div style={{textAlign: 'center', color: 'red'}}>Bạn không có phiếu bầu
+                                            nào </div>}
+
+                                    <div style={{textAlign: 'center', marginTop: '20px'}}><Button onClick={this.vote}
+                                                                                                  disabled={this.state.proposalRemain !== 0 || this.state.ballotRemain === 0}
+                                                                                                  variant='contained'
+                                                                                                  color='primary'>Bầu
+                                        cử</Button>
+                                    </div>
+
+                                </Paper>
+                                <Paper style={{paddingBottom:'20px'}}>
+                                    <Typography variant='h5' style={{color: "#6f6f94", margin: '15px'}}>Ủy quyền cho
+                                        người
+                                        khác (tùy chọn)</Typography>
+                                    {
+                                        this.state.myself.delegate !== '0x0000000000000000000000000000000000000000' ?
+                                            <Typography variant='h6' style={{color: "#6f6f94", margin: '15px'}}>
+                                                <span>Bạn đã ủy quyền rồi </span> <Warning
+                                                style={{color: '#ff6d43'}}/>
+                                            </Typography> :
+                                            <Typography variant='h6' style={{color: "#6f6f94", margin: '15px'}}>Bạn có
+                                                thể
+                                                chọn 1
+                                                địa chỉ ví để ủy quyền cho họ bầu cử</Typography>
+                                    }
+                                    <div style={{textAlign: 'center'}}>
+                                        <Select style={{margin: '10px 15px', minWidth: '150px'}}
+                                                value={this.state.delegateAddress}
+                                                onChange={this.onDelegateChanged}>
+                                            {delegateMenu.map((i, index) => <MenuItem key={index}
+                                                                                      value={i.addr}>{i.addr}</MenuItem>)}
+                                        </Select>
+                                        <div className={styles.alert}>{!!this.state.error && this.state.error} </div>
+                                    </div>
+                                    <div style={{textAlign: 'center'}}>
+                                        <Button
+                                            disabled={this.state.ballotRemain === 0 || this.state.myself.delegate !== '0x0000000000000000000000000000000000000000'}
+                                            variant='contained'
+                                            color={'primary'} onClick={this.startDelegate}>Ủy
+                                            quyền</Button>
+                                    </div>
+                                </Paper>
+
                             </Grid>
                     }
                     <Grid item md={2}/>
