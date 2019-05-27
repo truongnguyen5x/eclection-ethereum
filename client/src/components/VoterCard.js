@@ -31,7 +31,6 @@ const style = theme => ({
 
 class VoterCard extends Component {
 
-
     click = () => {
         this.props.click(this.props.id);
     };

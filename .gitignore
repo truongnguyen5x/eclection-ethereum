@@ -6,3 +6,4 @@ package-lock.json
 /client/package-lock.json
 /client/build
 /.sessions
+/client/src/contracts/build/

@@ -2,18 +2,18 @@ pragma solidity >=0.4.22 <0.7.0;
 pragma experimental ABIEncoderV2;
 /// @title Voting with delegation.
 contract Election {
-    uint public numberProposal = 1;  //một người bầu tối đa  bao nhiêu ng
+    uint public numberProposal = 1;  //một người bầu tối đa  bao nhiêu ứng cử viên
     bool public isVoting = false; // trạng thái của cuộc  bầu cử
 
 
-    struct Voter {//người vote (co kha nang vote hoặc uỷ quyền vote cho người khác)
+    struct Voter {//người vote (có khả năng vote hoặc uỷ quyền vote cho người khác)
         uint weight;
         address addr;
         address delegate;  //địa chỉ của người của người ủy quyền
         uint[] ballots;    // các vé người này đang giữ
     }
 
-    struct Ballot {
+    struct Ballot {  // phiếu bầu
         bool voted;
         uint[] voters; //những người được bầu trong 1 phiếu
     }
@@ -24,7 +24,7 @@ contract Election {
     }
 
     address public chairperson; //người tổ chức(có khả năng cấp quyền vote)
-    Voter[] public voterArray;
+    Voter[] public voterArray;  // danh sách người cử tri (bắt đầu từ trí 1)
     mapping(address => uint) public voters;
     Ballot[] public ballots;
     Proposal[] public proposals; //tạo danh sách ứng cử viên ( dưới dạng chuỗi dạng bytes32)
@@ -32,13 +32,14 @@ contract Election {
 
     constructor() public {
         chairperson = msg.sender;
-        voterArray.push(Voter(0, address(0), address(0), new uint[](0)));
+        voterArray.push(Voter(0, address(0), address(0), new uint[](0)));  // phần tử 0 là bỏ đi
     }
+
     // bắt đầu cuộc bầu cử
     function start(uint proposalInBallot) public {
         require(proposalInBallot < proposals.length, "so nguoi trong 1 phieu bau qua nhieu");
         require(proposals.length > 1, "So ung cu vien qua it");
-        require(voterArray.length >= 4, "So cu tri qua it");
+        require(voterArray.length >= 3, "So cu tri qua it");
         require(msg.sender == chairperson, "Nguoi gui khong dung");
         require(isVoting == false, "Bau cu dang dien ra, ket thuc truoc");
         isVoting = true;
@@ -52,10 +53,11 @@ contract Election {
             voterArray[i].weight = 1;
             voterArray[i].delegate = address(0);
         }
-        for (uint i = 1; i < proposals.length; i++) {
+        for (uint i = 0; i < proposals.length; i++) {
             proposals[i].voteCount = 0;
         }
     }
+
     // kết thúc cuộc bầu cử
     function end() public {
         require(msg.sender == chairperson, "Nguoi gui khong dung");
@@ -82,6 +84,7 @@ contract Election {
         }
         sender.delegate = to;
         Voter storage delegate_ = voterArray[voters[to]];
+        // người ủy quyền có thể sử dụng toàn bộ số phiếu sender có
         for (uint i = 0; i < sender.ballots.length; i++) {
             bool exist = false;
             for (uint j = 0; j < delegate_.ballots.length; j++) {
@@ -131,7 +134,7 @@ contract Election {
         }
     }
 
-    // dem so phieu con co the bau thu 1 list ballot
+    // đếm số phiếu còn lại của 1 người cử tri
     function getRemainBallot() public view returns (uint) {
         Voter storage sender = voterArray[voters[msg.sender]];
         uint count = 0;
@@ -143,10 +146,8 @@ contract Election {
         return count;
     }
 
-    // Computes the winning proposal taking all
-    // previous votes into account.
-    function winningProposal() private view
-    returns (uint){
+    // tìm số phiếu của người được bầu nhiều nhất
+    function winningProposal() private view returns (uint){
         uint winningVoteCount = 0;
         for (uint p = 0; p < proposals.length; p++) {
             if (proposals[p].voteCount > winningVoteCount) {
