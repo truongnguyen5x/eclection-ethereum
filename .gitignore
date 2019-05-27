@@ -1,6 +1,6 @@
 package-lock.json
 /node_modules
-.idea/
+/.idea
 .env
 /client/node_modules
 /client/package-lock.json
