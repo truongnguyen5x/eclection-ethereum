@@ -1,0 +1,35 @@
+{
+  "name": "he-phan-tan",
+  "version": "1.0.0",
+  "description": "he-phan-tan",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "nodemon server.js",
+    "migrate": "node database/migrate.js&& node database/seed/seeder.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "production": "cd client && npm run build && cd .. && export NODE_ENV=production|| set NODE_ENV=production&& nodemon server.js",
+    "production2": "export NODE_ENV=production|| set NODE_ENV=production&& nodemon server.js",
+    "start": "node server.js",
+    "truffle": "cd client&& truffle migrate --reset",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "author": "team",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "dropbox": "^4.0.16",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "isomorphic-fetch": "^2.2.1",
+    "multer": "^1.4.1",
+    "pg": "^7.9.0",
+    "session-file-store": "^1.2.0",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
+}

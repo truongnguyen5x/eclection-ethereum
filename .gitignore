@@ -1,0 +1,7 @@
+package-lock.json
+/node_modules
+.idea/
+.env
+/client/node_modules
+/client/package-lock.json
+/client/build

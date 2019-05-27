@@ -1,0 +1,9 @@
+.alert {
+    font-size: 15px;
+    color: red;
+    text-align: center;
+}
+
+.tableText {
+    font-size: 20px !important;
+}

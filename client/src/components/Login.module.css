@@ -1,0 +1,32 @@
+.wrapper {
+    margin: 10vh 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.avatar {
+    margin: 10px;
+    background-color: #ff4d31 !important;
+}
+
+.form {
+    width: 100%;
+    margin: 10px;
+}
+
+.link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.btn_login {
+    margin-top: 15px !important;
+}
+
+.alert {
+    font-size: 13px;
+    color: #ff2115;
+    font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
+}
