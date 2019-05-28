@@ -74,9 +74,11 @@ contract Election {
 
     // Delegate your vote to the voter `to`
     function delegate(address to) public {
+        require(isVoting == true, "Bau cu dang khoong  dien ra");
         // assigns reference
         Voter storage sender = voterArray[voters[msg.sender]];
         require(to != msg.sender, "Self-delegation is disallowed.");
+        require(voters[to] != 0, "Delegate account not is a voter");
         while (voterArray[voters[to]].delegate != address(0)) {
             to = voterArray[voters[to]].delegate;
             // We found a loop in the delegation, not allowed.
@@ -103,10 +105,10 @@ contract Election {
 
     // Give your vote (including votes delegated to you)
     function vote(uint[] memory array, uint ballotToVote) public {
+        require(isVoting == true, "Bau cu dang khong  dien ra");
         uint count = ballotToVote;
         Voter storage sender = voterArray[voters[msg.sender]];
         sender.weight = getRemainBallot();
-
         // lay so luong phieu con dung duoc
         require(sender.weight > 0 && sender.weight >= count, "Has no right to vote");
         require(array.length == numberProposal, "So nguoi duoc bau khong dung");
@@ -119,10 +121,11 @@ contract Election {
                 temp.voters = array;
             }
         }
+        // cộng phiếu bầu cho các ứng cử viên
         for (uint j = 0; j < array.length; j++) {
             proposals[array[j]].voteCount += ballotToVote;
         }
-
+        // tính lại weight cho các voter
         for (uint i = 0; i < voterArray.length; i++) {
             uint weight = 0;
             for (uint j = 0; j < voterArray[i].ballots.length; j++) {
@@ -163,6 +166,7 @@ contract Election {
         require(msg.sender == chairperson, "Nguoi gui khong dung");
         voterArray.length = 1;
         for (uint i = 0; i < addresses.length; i++) {
+            require(addresses[i] != chairperson, "Chu tich khong duoc bau cu");
             voterArray.push(Voter(0, addresses[i], address(0), new uint[](0)));
             voters[addresses[i]] = i + 1;
         }

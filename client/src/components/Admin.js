@@ -1,9 +1,5 @@
 import React, {Component} from "react";
-// import Web3 from 'web3';
 import styles from './Admin.module.css'
-// import contract from 'truffle-contract';
-// import MyContractJSON from './../contracts/build/Election';
-// import API from "../core/api_constants";
 import {Grid} from "@material-ui/core";
 import {Link, Route, Switch} from 'react-router-dom';
 import ProposalAdmin from './ProposalAdmin';
@@ -11,9 +7,6 @@ import VoterAdmin from './VoterAdmin';
 import ElectionAdmin from "./ElectionAdmin";
 
 class Admin extends Component {
-    constructor(props, match) {
-        super(props);
-    }
 
     render() {
         const path = window.location.pathname;

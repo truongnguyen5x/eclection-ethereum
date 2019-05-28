@@ -11,7 +11,7 @@ import Table from "@material-ui/core/Table";
 import Close from '@material-ui/icons/Close';
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-const style = theme => ({
+const style = () => ({
     row: {
         "&:hover": {
             backgroundColor: "#6f6f94",
@@ -25,7 +25,7 @@ class VoterAdmin extends Component {
         super(props);
         this.state = {
             error: '',
-            isVoting: false,
+            isVoting: true,
             voters: [],
             loading: false,
         }
@@ -53,10 +53,11 @@ class VoterAdmin extends Component {
             console.log('chairperson', main);
             return this.state.instance.isVoting();
         }).then(isVoting => {
-            console.log('is voting', isVoting);
+            console.log('is-voting', isVoting);
             this.setState({isVoting: isVoting});
-        })
-            .catch(err => console.log(err));
+        }).catch(err => {
+            console.log(err)
+        });
     };
 
     onChange = event => {
@@ -69,7 +70,7 @@ class VoterAdmin extends Component {
         }
     };
 
-    addVoter = () => {
+    onAddVoter = () => {
         const {voters, currentAddress, isVoting} = this.state;
         if (isVoting) return;
         const match = Constants.REGEX_ADDRESS.test(currentAddress);
@@ -84,18 +85,16 @@ class VoterAdmin extends Component {
         });
         if (exist) {
             this.setState({error: "Địa chỉ đã tồn tại !"});
-            return;
         } else {
             voters.unshift({
                 addr: currentAddress,
-                delegate: '0x0000000000000000000000000000000000000000',
+                delegate: Constants.ADDRESS_0,
                 ballots: [],
                 weight: 0
             });
             this.setState({voters: voters, error: ''});
         }
     };
-
 
     onRemove = (index) => {
         if (this.state.isVoting) return;
@@ -104,7 +103,7 @@ class VoterAdmin extends Component {
         this.setState({voters});
     };
 
-    save = () => {
+    onSave = () => {
         this.setState({loading: true});
         const temp = this.state.voters.map(item => item.addr);
         console.log('set voter', temp);
@@ -114,15 +113,17 @@ class VoterAdmin extends Component {
         }).catch(err => {
             console.log(err);
             this.setState({loading: false})
-        })
+        });
     };
 
     render() {
         const {isVoting} = this.state;
         return (
             <div>
-                {this.state.loading && <LinearProgress color='secondary'/>}
-                <h2 style={{marginLeft: '20px'}}>Quản lý người bầu cử</h2>
+                {this.state.loading && <LinearProgress color='primary'/>}
+                <h2 style={{marginLeft: '20px', color:'#0608a8'}}>
+                    Quản lý người bầu cử
+                </h2>
                 <Grid container>
                     <Grid item md={2}/>
                     <Grid item md={8}>
@@ -131,20 +132,21 @@ class VoterAdmin extends Component {
                                 <Input fullWidth={true} onChange={this.onChange} placeholder="Địa chỉ ví của cử tri "
                                        onKeyPress={event => {
                                            if (event.key === 'Enter') {
-                                               this.addVoter()
+                                               this.onAddVoter()
                                            }
                                        }}
                                        onFocus={e => e.target.select()}/>
                                 <div className={styles.alert}>{!!this.state.error && this.state.error} </div>
                             </div>
                             <div>
-                                <Button color="primary" variant='contained' onClick={this.addVoter} disabled={isVoting}
-                                        style={{marginRight: '10px'}}>Thêm cử tri</Button>
+                                <Button color="primary" variant='contained' onClick={this.onAddVoter}
+                                        disabled={isVoting}
+                                        style={{marginRight: '10px'}}>
+                                    Thêm cử tri
+                                </Button>
                             </div>
                         </div>
-
                     </Grid>
-                    <Grid item md={2}/>
                 </Grid>
                 <Grid container>
                     <Grid item md={1}/>
@@ -156,11 +158,12 @@ class VoterAdmin extends Component {
                                         <TableRow>
                                             <TableCell className={styles.tableText}>Địa chỉ ví </TableCell>
                                             <TableCell className={styles.tableText}>Địa chỉ người ủy quyền </TableCell>
-                                            <TableCell className={styles.tableText} style={{textAlign: "center"}}>Số
-                                                phiếu
-                                                đang có</TableCell>
-                                            <TableCell className={styles.tableText}
-                                                       style={{textAlign: "center"}}>Xóa </TableCell>
+                                            <TableCell className={styles.tableText} style={{textAlign: "center"}}>
+                                                Số phiếu đang có
+                                            </TableCell>
+                                            <TableCell className={styles.tableText} style={{textAlign: "center"}}>
+                                                Xóa
+                                            </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -173,29 +176,32 @@ class VoterAdmin extends Component {
                                                 <TableCell
                                                     style={{textAlign: "center"}}>
                                                     <Button disabled={isVoting}
-                                                            onClick={() => this.onRemove(i)}><Close/></Button></TableCell>
+                                                            onClick={() => this.onRemove(i)}><Close/></Button>
+                                                </TableCell>
                                             </TableRow>
                                         )}
                                     </TableBody>
                                 </Table>
                                 <div style={{textAlign: 'center', margin: '20px auto'}}>
-                                    <Button disabled={isVoting} onClick={this.save} variant='contained' color='primary'>Save
+                                    <Button disabled={isVoting} onClick={this.onSave} variant='contained'
+                                            color='primary'>Save
                                         change</Button>
                                 </div>
                             </div>
-                            : <div style={{
+                            :
+                            <div style={{
                                 textAlign: 'center',
                                 fontSize: '20px',
                                 marginTop: '50px'
-                            }}>Không có cử tri lào</div>
+                            }}>
+                                Không có cử tri lào
+                            </div>
                         }
                     </Grid>
-                    <Grid item md={1}/>
                 </Grid>
-
-            </div>);
+            </div>
+        );
     }
-
 }
 
 export default withStyles(style)(VoterAdmin);

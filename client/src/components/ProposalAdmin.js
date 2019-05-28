@@ -15,7 +15,7 @@ class ProposalAdmin extends Component {
         this.state = {
             error: '',
             proposals: [],
-            isVoting: false,
+            isVoting: true,
             loading: false,
         }
     }
@@ -37,22 +37,22 @@ class ProposalAdmin extends Component {
             console.log('proposals', proposals);
             this.setState({proposals: proposals || []});
             return this.state.instance.chairperson();
-
         }).then(main => {
             console.log('chairperson', main);
             return this.state.instance.isVoting();
         }).then(isVoting => {
-            console.log('is voting', isVoting);
+            console.log('is-voting', isVoting);
             this.setState({isVoting: isVoting});
-        })
-            .catch(err => console.log(err));
-
+        }).catch(err => {
+            console.log(err);
+        });
     };
 
     onChange = event => {
         this.setState({currentName: event.target.value});
     };
-    addProposal = () => {
+
+    onAddProposal = () => {
         if (this.state.isVoting) return;
         if (!this.state.currentName) {
             this.setState({error: 'Tên không được để trống !'});
@@ -70,33 +70,34 @@ class ProposalAdmin extends Component {
         }
 
     };
+
     onRemove = (key) => {
         if (this.state.isVoting) return;
         const temp = this.state.proposals;
         temp.splice(key, 1);
         this.setState({proposals: temp})
     };
-    save = () => {
+
+    onSave = () => {
         this.setState({loading: true});
         const temp = this.state.proposals.map(item => item.name);
         this.state.instance.setProposal(temp, {from: this.state.account}).then(result => {
-            console.log('save proposal', result);
+            console.log('save-proposal', result);
             this.setState({loading: false});
         }).catch(err => {
             this.setState({loading: false});
-            console.log(err)
+            console.log(err);
         })
     };
 
     render() {
-        const cards = this.state.proposals.map((item, index) => {
-            return (<ProposalCard key={index} id={index} name={item.name} onRemove={this.onRemove}/>);
-        });
         const {isVoting} = this.state;
         return (
             <div>
-                {this.state.loading && <LinearProgress color='secondary'/>}
-                <h2 style={{marginLeft: '20px'}}>Quản lý ứng cử viên </h2>
+                {this.state.loading && <LinearProgress color='primary'/>}
+                <h2 style={{marginLeft: '20px', color:'#0608a8'}}>
+                    Quản lý ứng cử viên
+                </h2>
                 <Grid container>
                     <Grid item md={2}/>
                     <Grid item md={8}>
@@ -105,32 +106,44 @@ class ProposalAdmin extends Component {
                                 <Input fullWidth={true} onChange={this.onChange} placeholder="Tên ứng cử viên"
                                        onKeyPress={event => {
                                            if (event.key === 'Enter') {
-                                               this.addProposal()
+                                               this.onAddProposal()
                                            }
                                        }}
                                        onFocus={e => e.target.select()}/>
                                 <div className={styles.alert}>{!!this.state.error && this.state.error} </div>
                             </div>
                             <div>
-                                <Button  disabled={isVoting} color="primary" variant='contained' onClick={this.addProposal}>Thêm</Button>
+                                <Button disabled={isVoting} color="primary" variant='contained'
+                                        onClick={this.onAddProposal}>
+                                    Thêm
+                                </Button>
                             </div>
                         </div>
-                        {cards}
+                        {this.state.proposals.map((item, index) => {
+                            return (
+                                <ProposalCard key={index} id={index} name={item.name} onRemove={this.onRemove}/>
+                            );
+                        })}
                         {this.state.proposals.length !== 0 ?
                             <div style={{textAlign: 'center', margin: '20px auto'}}>
-                                <Button  disabled={isVoting} onClick={this.save} variant='contained' color='primary'>Save change</Button>
-                            </div> : <div style={{
+                                <Button disabled={isVoting} onClick={this.onSave} variant='contained' color='primary'>
+                                    Save change
+                                </Button>
+                            </div>
+                            :
+                            <div style={{
                                 textAlign: 'center',
                                 fontSize: '20px',
                                 marginTop: '50px'
-                            }}>Không có ứng cử viên nào</div>
+                            }}>
+                                Không có ứng cử viên nào
+                            </div>
                         }
                     </Grid>
-                    <Grid item md={2}/>
                 </Grid>
-            </div>);
+            </div>
+        );
     }
-
 }
 
 export default ProposalAdmin;

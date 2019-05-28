@@ -5,5 +5,5 @@ package-lock.json
 /client/node_modules
 /client/package-lock.json
 /client/build
-/.sessions
+/sessions
 /client/src/contracts/build/

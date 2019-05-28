@@ -3,7 +3,7 @@ import {Card} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles'
 import Close from '@material-ui/icons/Close'
 
-const style = theme => ({
+const style = () => ({
     card: {
         "&:hover": {
             backgroundColor: "#1a193e",
@@ -27,22 +27,17 @@ const style = theme => ({
 });
 
 class ProposalCard extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            hover: false
-        }
-    }
-
-    remove = () => {
+    onRemove = () => {
         this.props.onRemove(this.props.id)
     };
 
     render() {
-        return (<Card className={this.props.classes.card}>
-            <span className={this.props.classes.text}>{(this.props.id + 1) + ": " + this.props.name} </span>
-            <div className={this.props.classes.close} onClick={this.remove}><Close/></div>
-        </Card>);
+        return (
+            <Card className={this.props.classes.card}>
+                <span className={this.props.classes.text}>{(this.props.id + 1) + ": " + this.props.name} </span>
+                <div className={this.props.classes.close} onClick={this.onRemove}><Close/></div>
+            </Card>
+        );
     }
 }
 
