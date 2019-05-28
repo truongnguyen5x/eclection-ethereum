@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Web3 from "web3";
 import styles from './ProposalAdmin.module.css'
-import API from "../core/api_constants";
+import API from "../core/api-constants";
 import contract from "truffle-contract";
-import MyContractJSON from "../contracts/build/Election";
+import MyContractJSON from "../contracts/Election";
 import {Button, Grid, Input} from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import ProposalCard from "./ProposalCard";

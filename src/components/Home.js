@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import styles from './Home.module.css';
-import API from './../core/api_constants';
+import API from '../core/api-constants';
 import Web3 from 'web3';
 import contract from 'truffle-contract';
-import MyContractJSON from './../contracts/build/Election';
+import MyContractJSON from './../contracts/Election';
 import Typography from "@material-ui/core/Typography";
 import {
     Button,
@@ -19,7 +19,7 @@ import {
 } from "@material-ui/core";
 import Warning from '@material-ui/icons/Warning';
 import VoterCard from "./VoterCard";
-import Constants from "../core/app_constant";
+import Constants from "../core/app-constant";
 import Table from "@material-ui/core/Table";
 
 
