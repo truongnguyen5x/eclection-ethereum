@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Web3 from "web3";
 import styles from './ProposalAdmin.module.css'
 import API from "../core/api-constants";
-import contract from "truffle-contract";
+import contract from "@truffle/contract";
 import MyContractJSON from "../contracts/Election";
 import {Button, Grid, Input} from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -21,7 +21,9 @@ class ProposalAdmin extends Component {
     }
 
     componentDidMount() {
-        const web3 = new Web3(Web3.givenProvider || API.PROVIDER_URL);
+        // console.log(API.PROVIDER_URL)
+        const web3 = new Web3(window.ethereum);
+        window.ethereum.enable();
         this.setState({web3: web3});
         const MyContract = contract(MyContractJSON);
         MyContract.setProvider(web3.eth.givenProvider);

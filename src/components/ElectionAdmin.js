@@ -3,7 +3,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import {Button, Grid, Table, TableBody, TableCell, TableRow} from "@material-ui/core";
 import Web3 from "web3";
 import API from "../core/api-constants";
-import contract from "truffle-contract";
+import contract from "@truffle/contract";
 import MyContractJSON from "../contracts/Election";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
@@ -24,7 +24,8 @@ class ElectionAdmin extends Component {
     }
 
     componentDidMount() {
-        const web3 = new Web3(Web3.givenProvider || API.PROVIDER_URL);
+        const web3 = new Web3(window.ethereum);
+        window.ethereum.enable();
         const MyContract = contract(MyContractJSON);
         MyContract.setProvider(web3.eth.givenProvider);
         MyContract.deployed().then(instance => {

@@ -3,7 +3,7 @@ import {withStyles} from "@material-ui/core/styles";
 import styles from './VoterAdmin.module.css';
 import Web3 from "web3";
 import API from "../core/api-constants";
-import contract from "truffle-contract";
+import contract from "@truffle/contract";
 import MyContractJSON from "../contracts/Election";
 import {Button, Grid, Input, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 import Constants from '../core/app-constant';
@@ -32,7 +32,8 @@ class VoterAdmin extends Component {
     }
 
     componentDidMount() {
-        const web3 = new Web3(Web3.givenProvider || API.PROVIDER_URL);
+        const web3 = new Web3(window.ethereum);
+        window.ethereum.enable();
         this.setState({web3: web3});
         const MyContract = contract(MyContractJSON);
         MyContract.setProvider(web3.eth.givenProvider);

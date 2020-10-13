@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import styles from './Home.module.css';
 import API from '../core/api-constants';
 import Web3 from 'web3';
-import contract from 'truffle-contract';
+import contract from '@truffle/contract';
 import MyContractJSON from './../contracts/Election';
 import Typography from "@material-ui/core/Typography";
 import {
@@ -44,7 +44,8 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        const web3 = new Web3(Web3.givenProvider || API.PROVIDER_URL);
+        const web3 = new Web3(window.ethereum);
+        window.ethereum.enable();
         const MyContract = contract(MyContractJSON);
         MyContract.setProvider(web3.eth.givenProvider);
         MyContract.deployed().then(instance => {
